@@ -1,11 +1,18 @@
 package main
 
 import (
+	_ "embed"
 	"os"
 	"strings"
 
 	"text/template"
 )
+
+//go:embed main.template
+var fileTemplateMain string
+
+//go:embed test.template
+var fileTemplateTest string
 
 type FuncName struct {
 	Normal string
@@ -23,16 +30,13 @@ func generateName(words []string) string {
 func main() {
 	var arg []string = os.Args[1:]
 	var funcName = arg[len(arg)-1]
-	arg = arg[:len(arg)-2]
+	arg = arg[:len(arg)-1]
 
 	var fileName = generateName(arg) + ".go"
 	var fileNameTest = generateName(arg) + "_test.go"
 
-	var fileTemplateMain, _ = os.ReadFile("main.template")
-	var fileTemplateTest, _ = os.ReadFile("test.template")
-
-	mainTemplate, _ := template.New("Main").Parse(string(fileTemplateMain))
-	testTemplate, _ := template.New("Test").Parse(string(fileTemplateTest))
+	mainTemplate, _ := template.New("Main").Parse(fileTemplateMain)
+	testTemplate, _ := template.New("Test").Parse(fileTemplateTest)
 
 	var outMain, _ = os.Create(fileName)
 	defer outMain.Close()
