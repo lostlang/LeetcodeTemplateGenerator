@@ -6,8 +6,7 @@ import (
 )
 
 type {{.Normal}}TestPair struct {
-	input   
-	out   
+	input
 }
 
 var {{.Normal}}TestCases = []{{.Normal}}TestPair{
